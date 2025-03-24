@@ -4,13 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { X, Edit, Trash, Plus } from 'lucide-react';
-import { EventCategory } from '@/types/calendar';
-
-interface CategoryData {
-  id: EventCategory;
-  name: string;
-  icon: string;
-}
+import { EventCategory, CategoryData } from '@/types/calendar';
 
 interface ManageCategoriesDialogProps {
   isOpen: boolean;
@@ -79,7 +73,8 @@ const ManageCategoriesDialog: React.FC<ManageCategoriesDialogProps> = ({
                 className="flex items-center justify-between p-3 border rounded-lg"
               >
                 <div className="flex items-center">
-                  <span className="w-6 h-6 flex items-center justify-center mr-3 text-lg">
+                  <span className="w-6 h-6 flex items-center justify-center mr-3 text-lg" 
+                        style={{ color: category.color }}>
                     {category.icon}
                   </span>
                   <span className="font-medium">{category.name}</span>
@@ -116,6 +111,11 @@ const ManageCategoriesDialog: React.FC<ManageCategoriesDialogProps> = ({
                 <Input placeholder="Enter icon or emoji" />
               </div>
               
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Color</label>
+                <Input placeholder="Enter color (e.g., #ff0000)" />
+              </div>
+              
               <Button className="w-full mt-4">
                 <Plus className="h-4 w-4 mr-2" />
                 Add Category
@@ -148,6 +148,18 @@ const ManageCategoriesDialog: React.FC<ManageCategoriesDialogProps> = ({
                     onChange={(e) => setEditingCategory({
                       ...editingCategory,
                       icon: e.target.value
+                    })}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Color</label>
+                  <Input 
+                    value={editingCategory.color}
+                    type="color"
+                    onChange={(e) => setEditingCategory({
+                      ...editingCategory,
+                      color: e.target.value
                     })}
                   />
                 </div>
