@@ -11,9 +11,6 @@ interface CalendarGridProps {
   cellHeight: number;
   hourlyTemperatures: Record<number, number[]>;
   onCellClick: (time: number, day: number) => void;
-  onDragOver: (e: React.DragEvent, time: number, day: number) => void;
-  onDrop: (e: React.DragEvent, time: number, day: number) => void;
-  onDragStart: (event: React.DragEvent, id: string) => void;
   onEditEvent: (id: string) => void;
 }
 
@@ -24,9 +21,6 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
   cellHeight,
   hourlyTemperatures,
   onCellClick,
-  onDragOver,
-  onDrop,
-  onDragStart,
   onEditEvent
 }) => {
   return (
@@ -47,9 +41,6 @@ const CalendarGrid: React.FC<CalendarGridProps> = ({
           cellHeight={cellHeight}
           events={events}
           onCellClick={onCellClick}
-          onDragOver={onDragOver}
-          onDrop={onDrop}
-          onDragStart={onDragStart}
           onEditEvent={onEditEvent}
         />
       ))}

@@ -28,9 +28,6 @@ const IndexPage: React.FC = () => {
     handleCellClick,
     handleEditEvent,
     handleSaveEvent,
-    handleDragStart,
-    handleDragOver,
-    handleDrop,
     setEditingEvent,
     setIsEventDialogOpen,
     setIsCategoriesDialogOpen,
@@ -70,9 +67,6 @@ const IndexPage: React.FC = () => {
           cellHeight={cellHeight}
           hourlyTemperatures={hourlyTemperatures}
           onCellClick={handleCellClick}
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-          onDragStart={handleDragStart}
           onEditEvent={handleEditEvent}
         />
       </div>

@@ -9,9 +9,6 @@ interface DayColumnProps {
   cellHeight: number;
   events: EventData[];
   onCellClick: (time: number, day: number) => void;
-  onDragOver: (e: React.DragEvent, time: number, day: number) => void;
-  onDrop: (e: React.DragEvent, time: number, day: number) => void;
-  onDragStart: (event: React.DragEvent, id: string) => void;
   onEditEvent: (id: string) => void;
 }
 
@@ -21,9 +18,6 @@ const DayColumn: React.FC<DayColumnProps> = ({
   cellHeight,
   events,
   onCellClick,
-  onDragOver,
-  onDrop,
-  onDragStart,
   onEditEvent
 }) => {
   return (
@@ -35,8 +29,6 @@ const DayColumn: React.FC<DayColumnProps> = ({
           className="calendar-cell"
           style={{ height: `${cellHeight}px` }}
           onClick={() => onCellClick(time, dayIndex)}
-          onDragOver={(e) => onDragOver(e, time, dayIndex)}
-          onDrop={(e) => onDrop(e, time, dayIndex)}
         >
         </div>
       ))}
@@ -49,7 +41,6 @@ const DayColumn: React.FC<DayColumnProps> = ({
             key={event.id}
             event={event}
             cellHeight={cellHeight}
-            onDragStart={onDragStart}
             onEditEvent={onEditEvent}
           />
         ))

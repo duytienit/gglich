@@ -91,6 +91,7 @@
     top: 0;
     z-index: 10;
     background-color: hsl(var(--background));
+    border-bottom: 1px solid hsl(var(--border));
   }
 
   .time-column {
@@ -98,52 +99,52 @@
     left: 0;
     z-index: 5;
     background-color: hsl(var(--background));
+    border-right: 1px solid hsl(var(--border));
   }
 
   .event-card {
-    @apply rounded-md p-2 shadow-lg transition-all duration-200 hover:shadow-xl flex flex-col;
+    @apply rounded-md p-2 shadow-md transition-all duration-200 hover:shadow-xl flex flex-col;
     position: absolute;
     width: calc(100% - 8px);
     left: 4px;
     z-index: 20;
-    cursor: grab;
+    cursor: pointer;
   }
 
   .event-card.work {
     @apply bg-gradient-to-br from-[#e74c3c] to-[#c0392b] text-white;
-    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.25);
+    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.25);
   }
   
   .event-card.study {
     @apply bg-gradient-to-br from-[#3498db] to-[#2980b9] text-white;
-    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.25);
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.25);
   }
   
   .event-card.important {
     @apply bg-gradient-to-br from-[#f39c12] to-[#e67e22] text-white;
-    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.25);
+    box-shadow: 0 2px 8px rgba(243, 156, 18, 0.25);
   }
   
   .event-card.health {
     @apply bg-gradient-to-br from-[#2ecc71] to-[#27ae60] text-white;
-    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.25);
+    box-shadow: 0 2px 8px rgba(46, 204, 113, 0.25);
   }
 
-  .event-card:active {
-    cursor: grabbing;
-    @apply scale-[1.02] shadow-2xl;
+  .event-card:hover {
+    @apply scale-[1.01] shadow-lg;
   }
 
   .event-title {
-    @apply font-medium text-sm;
+    @apply font-semibold text-sm;
   }
 
   .event-time {
-    @apply text-xs opacity-90;
+    @apply text-xs opacity-90 font-medium;
   }
 
   .event-description {
-    @apply text-xs opacity-75 mt-1;
+    @apply text-xs opacity-85 mt-1 font-normal;
   }
 
   .temp-indicator {
@@ -163,7 +164,7 @@
   }
 
   .calendar-cell {
-    @apply border border-border relative overflow-hidden min-h-[60px];
+    @apply border border-border relative overflow-hidden min-h-[60px] hover:bg-accent/20 transition-colors;
   }
 
   .dialog-backdrop {
@@ -189,4 +190,24 @@
   .week-transition-prev-exit {
     animation: slide-out-right 0.4s ease-out;
   }
+}
+
+@keyframes slide-in-right {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes slide-out-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes slide-in-left {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes slide-out-right {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
 }

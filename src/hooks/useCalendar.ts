@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from 'react';
 import { addDays, subDays } from 'date-fns';
 import { EventData, CalendarDay, CategoryData } from '@/types/calendar';
@@ -77,7 +78,6 @@ export const useCalendar = () => {
   const [editingEvent, setEditingEvent] = useState<EventData | null>(null);
   const [isEventDialogOpen, setIsEventDialogOpen] = useState(false);
   const [isCategoriesDialogOpen, setIsCategoriesDialogOpen] = useState(false);
-  const [draggedEventId, setDraggedEventId] = useState<string | null>(null);
   const [categories, setCategories] = useState<CategoryData[]>(defaultCategories);
   const [weekTransition, setWeekTransition] = useState<'next' | 'prev' | null>(null);
   const [hourlyTemperatures, setHourlyTemperatures] = useState<Record<number, number[]>>({});
@@ -144,6 +144,11 @@ export const useCalendar = () => {
     if (event) {
       setEditingEvent({...event});
       setIsEventDialogOpen(true);
+      
+      toast({
+        title: "Edit Event",
+        description: `Editing "${event.title}"`,
+      });
     }
   };
 
@@ -166,65 +171,6 @@ export const useCalendar = () => {
     }
   };
 
-  // Improved drag and drop handling
-  const handleDragStart = (e: React.DragEvent, id: string) => {
-    setDraggedEventId(id);
-    e.dataTransfer.setData('text/plain', id);
-    
-    if (e.currentTarget instanceof HTMLElement) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const offsetY = e.clientY - rect.top;
-      e.dataTransfer.setDragImage(e.currentTarget, 0, offsetY);
-    }
-  };
-
-  const handleDragOver = (e: React.DragEvent, time: number, day: number) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-  };
-
-  const handleDrop = (e: React.DragEvent, time: number, day: number) => {
-    e.preventDefault();
-    const id = e.dataTransfer.getData('text/plain');
-    
-    if (!id || !draggedEventId) return;
-    
-    // Find the event being dragged
-    const draggedEvent = events.find(event => event.id === id);
-    if (!draggedEvent) return;
-    
-    // Calculate more precise drop time based on cursor position
-    const cellRect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    const dropPositionY = e.clientY - cellRect.top;
-    const percentageOfCell = dropPositionY / cellHeight;
-    
-    // Round to nearest half hour
-    const halfHourOffset = Math.round(percentageOfCell * 2) / 2;
-    const preciseTime = time + halfHourOffset;
-    
-    const duration = draggedEvent.endTime - draggedEvent.startTime;
-    
-    const updatedEvents = events.map(event => {
-      if (event.id === id) {
-        return {
-          ...event,
-          day,
-          startTime: preciseTime,
-          endTime: preciseTime + duration,
-        };
-      }
-      return event;
-    });
-    
-    setEvents(updatedEvents);
-    setDraggedEventId(null);
-    
-    toast({
-      title: "Event moved",
-      description: "Your event has been rescheduled",
-    });
-  };
-
   return {
     currentDate,
     days,
@@ -232,7 +178,6 @@ export const useCalendar = () => {
     editingEvent,
     isEventDialogOpen,
     isCategoriesDialogOpen,
-    draggedEventId,
     categories,
     weekTransition,
     hourlyTemperatures,
@@ -244,9 +189,6 @@ export const useCalendar = () => {
     handleCellClick,
     handleEditEvent,
     handleSaveEvent,
-    handleDragStart,
-    handleDragOver,
-    handleDrop,
     setEditingEvent,
     setIsEventDialogOpen,
     setIsCategoriesDialogOpen,
