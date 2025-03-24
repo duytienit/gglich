@@ -1,8 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Palette } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
 import { EventData, EventCategory } from '@/types/calendar';
 import EventDialogHeader from './event-dialog/EventDialogHeader';
 import EventTextField from './event-dialog/EventTextField';
@@ -11,6 +11,7 @@ import EventTimeFields from './event-dialog/EventTimeFields';
 import EventCategorySelect from './event-dialog/EventCategorySelect';
 import EventImportantToggle from './event-dialog/EventImportantToggle';
 import EventDialogActions from './event-dialog/EventDialogActions';
+import EventRecurrenceSelect from './event-dialog/EventRecurrenceSelect';
 
 interface EditEventDialogProps {
   event: EventData | null;
