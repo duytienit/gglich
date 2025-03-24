@@ -1,13 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { X, Palette } from 'lucide-react';
+import { Palette } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
 import { EventData, EventCategory } from '@/types/calendar';
-import { Label } from '@/components/ui/label';
+import EventDialogHeader from './event-dialog/EventDialogHeader';
+import EventTextField from './event-dialog/EventTextField';
+import EventTextArea from './event-dialog/EventTextArea';
+import EventTimeFields from './event-dialog/EventTimeFields';
+import EventCategorySelect from './event-dialog/EventCategorySelect';
+import EventImportantToggle from './event-dialog/EventImportantToggle';
+import EventDialogActions from './event-dialog/EventDialogActions';
 
 interface EditEventDialogProps {
   event: EventData | null;
@@ -76,87 +79,41 @@ const EditEventDialog: React.FC<EditEventDialogProps> = ({
         className="dialog-content"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-medium">
-            {event ? 'Edit Event' : 'Create Event'}
-          </h2>
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="h-4 w-4" />
-          </Button>
-        </div>
+        <EventDialogHeader 
+          title={event ? 'Edit Event' : 'Create Event'} 
+          onClose={onClose}
+        />
 
         <div className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="title">Event Title</Label>
-            <Input
-              id="title"
-              placeholder="Enter event title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full"
-            />
-          </div>
+          <EventTextField
+            id="title"
+            label="Event Title"
+            placeholder="Enter event title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
 
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              placeholder="Add a description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-full min-h-[80px]"
-            />
-          </div>
+          <EventTextArea
+            id="description"
+            label="Description"
+            placeholder="Add a description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="startTime">Start Time</Label>
-              <Input
-                id="startTime"
-                type="text"
-                placeholder="e.g. 9.5 for 9:30"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-              />
-              <p className="text-xs text-muted-foreground">
-                Use decimal for half hours (e.g. 9.5 for 9:30)
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="endTime">End Time</Label>
-              <Input
-                id="endTime"
-                type="text"
-                placeholder="e.g. 10.5 for 10:30"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-              />
-            </div>
-          </div>
+          <EventTimeFields
+            startTime={startTime}
+            endTime={endTime}
+            onStartTimeChange={(e) => setStartTime(e.target.value)}
+            onEndTimeChange={(e) => setEndTime(e.target.value)}
+          />
 
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="category">Category</Label>
-              <Select
-                value={category}
-                onValueChange={(value) => setCategory(value as EventCategory)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((cat) => (
-                    <SelectItem key={cat.id} value={cat.id}>
-                      <div className="flex items-center">
-                        <span className="mr-2">{cat.icon}</span>
-                        {cat.name}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <EventCategorySelect
+              category={category}
+              onCategoryChange={setCategory}
+              categories={categories}
+            />
 
             <div className="space-y-2">
               <Label htmlFor="recurrence">Recurrence</Label>
@@ -175,14 +132,10 @@ const EditEventDialog: React.FC<EditEventDialogProps> = ({
           </div>
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Switch
-                id="important"
-                checked={isImportant}
-                onCheckedChange={setIsImportant}
-              />
-              <Label htmlFor="important">Mark as important</Label>
-            </div>
+            <EventImportantToggle
+              isImportant={isImportant}
+              onImportantChange={setIsImportant}
+            />
 
             <Button variant="outline" className="flex items-center gap-1">
               <Palette className="h-4 w-4" />
@@ -190,14 +143,10 @@ const EditEventDialog: React.FC<EditEventDialogProps> = ({
             </Button>
           </div>
 
-          <div className="flex justify-end space-x-2 pt-4">
-            <Button variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button onClick={handleSave}>
-              Save
-            </Button>
-          </div>
+          <EventDialogActions
+            onCancel={onClose}
+            onSave={handleSave}
+          />
         </div>
       </div>
     </div>
