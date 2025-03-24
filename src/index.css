@@ -1,10 +1,11 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -13,7 +14,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 210 100% 50%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 40% 96.1%;
@@ -33,22 +34,6 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
   .dark {
@@ -61,7 +46,7 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
+    --primary: 210 100% 50%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
     --secondary: 217.2 32.6% 17.5%;
@@ -79,14 +64,6 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -97,5 +74,119 @@
 
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: 100px repeat(7, 1fr);
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+
+  .calendar-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: hsl(var(--background));
+  }
+
+  .time-column {
+    position: sticky;
+    left: 0;
+    z-index: 5;
+    background-color: hsl(var(--background));
+  }
+
+  .event-card {
+    @apply rounded-md p-2 shadow-lg transition-all duration-200 hover:shadow-xl flex flex-col;
+    position: absolute;
+    width: calc(100% - 8px);
+    left: 4px;
+    z-index: 20;
+    cursor: grab;
+  }
+
+  .event-card.work {
+    @apply bg-gradient-to-br from-[#e74c3c] to-[#c0392b] text-white;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.25);
+  }
+  
+  .event-card.study {
+    @apply bg-gradient-to-br from-[#3498db] to-[#2980b9] text-white;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.25);
+  }
+  
+  .event-card.important {
+    @apply bg-gradient-to-br from-[#f39c12] to-[#e67e22] text-white;
+    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.25);
+  }
+  
+  .event-card.health {
+    @apply bg-gradient-to-br from-[#2ecc71] to-[#27ae60] text-white;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.25);
+  }
+
+  .event-card:active {
+    cursor: grabbing;
+    @apply scale-[1.02] shadow-2xl;
+  }
+
+  .event-title {
+    @apply font-medium text-sm;
+  }
+
+  .event-time {
+    @apply text-xs opacity-90;
+  }
+
+  .event-description {
+    @apply text-xs opacity-75 mt-1;
+  }
+
+  .temp-indicator {
+    @apply text-xs font-semibold;
+  }
+
+  .temp-warm {
+    @apply text-orange-500;
+  }
+
+  .temp-cool {
+    @apply text-blue-500;
+  }
+
+  .temp-moderate {
+    @apply text-green-500;
+  }
+
+  .calendar-cell {
+    @apply border border-border relative overflow-hidden min-h-[60px];
+  }
+
+  .dialog-backdrop {
+    @apply fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center;
+  }
+
+  .dialog-content {
+    @apply bg-card rounded-lg shadow-2xl w-full max-w-lg p-6 mx-4 animate-scale-in;
+  }
+  
+  .week-transition-enter {
+    animation: slide-in-right 0.4s ease-out;
+  }
+  
+  .week-transition-exit {
+    animation: slide-out-left 0.4s ease-out;
+  }
+
+  .week-transition-prev-enter {
+    animation: slide-in-left 0.4s ease-out;
+  }
+  
+  .week-transition-prev-exit {
+    animation: slide-out-right 0.4s ease-out;
   }
 }
