@@ -55,9 +55,15 @@ const CalendarEvent: React.FC<CalendarEventProps> = ({
       <p className="event-time">
         {formatTime(event.startTime)} - {formatTime(event.endTime)}
       </p>
-      {event.description && (
-        <p className="event-description">{event.description}</p>
-      )}
+      <div 
+        className="event-description" 
+        onClick={(e) => {
+          e.stopPropagation();
+          onEditEvent(event.id);
+        }}
+      >
+        {event.description || <span className="text-muted-foreground italic">Click to add description</span>}
+      </div>
       {event.isImportant && (
         <div className="absolute top-1 right-1 w-2 h-2 bg-yellow-300 rounded-full animate-pulse-subtle" />
       )}

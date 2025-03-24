@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { addDays, subDays } from 'date-fns';
 import { EventData, CalendarDay, CategoryData } from '@/types/calendar';
@@ -67,8 +66,8 @@ const sampleEvents: EventData[] = [
   },
 ];
 
-// Generate time slots for the calendar (7:00 AM to 6:00 PM)
-export const timeSlots = Array.from({ length: 12 }, (_, i) => i + 7);
+// Generate time slots for the calendar (24 hours)
+export const timeSlots = Array.from({ length: 24 }, (_, i) => i);
 
 export const useCalendar = () => {
   const { toast } = useToast();
@@ -143,7 +142,7 @@ export const useCalendar = () => {
   const handleEditEvent = (id: string) => {
     const event = events.find(e => e.id === id);
     if (event) {
-      setEditingEvent(event);
+      setEditingEvent({...event});
       setIsEventDialogOpen(true);
     }
   };
@@ -167,7 +166,7 @@ export const useCalendar = () => {
     }
   };
 
-  // Handle drag and drop
+  // Improved drag and drop handling
   const handleDragStart = (e: React.DragEvent, id: string) => {
     setDraggedEventId(id);
     e.dataTransfer.setData('text/plain', id);
@@ -181,11 +180,18 @@ export const useCalendar = () => {
 
   const handleDragOver = (e: React.DragEvent, time: number, day: number) => {
     e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
   };
 
   const handleDrop = (e: React.DragEvent, time: number, day: number) => {
     e.preventDefault();
     const id = e.dataTransfer.getData('text/plain');
+    
+    if (!id || !draggedEventId) return;
+    
+    // Find the event being dragged
+    const draggedEvent = events.find(event => event.id === id);
+    if (!draggedEvent) return;
     
     // Calculate more precise drop time based on cursor position
     const cellRect = (e.currentTarget as HTMLElement).getBoundingClientRect();
@@ -196,9 +202,10 @@ export const useCalendar = () => {
     const halfHourOffset = Math.round(percentageOfCell * 2) / 2;
     const preciseTime = time + halfHourOffset;
     
+    const duration = draggedEvent.endTime - draggedEvent.startTime;
+    
     const updatedEvents = events.map(event => {
       if (event.id === id) {
-        const duration = event.endTime - event.startTime;
         return {
           ...event,
           day,

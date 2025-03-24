@@ -4,16 +4,21 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface EventRecurrenceSelectProps {
-  defaultValue?: string;
+  recurrence: string;
+  onRecurrenceChange: (value: string) => void;
 }
 
 const EventRecurrenceSelect: React.FC<EventRecurrenceSelectProps> = ({
-  defaultValue = 'none'
+  recurrence,
+  onRecurrenceChange
 }) => {
   return (
     <div className="space-y-2">
       <Label htmlFor="recurrence">Recurrence</Label>
-      <Select defaultValue={defaultValue}>
+      <Select 
+        value={recurrence} 
+        onValueChange={onRecurrenceChange}
+      >
         <SelectTrigger>
           <SelectValue placeholder="No recurrence" />
         </SelectTrigger>

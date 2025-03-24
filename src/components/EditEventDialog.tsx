@@ -1,7 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Palette } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { EventData, EventCategory } from '@/types/calendar';
 import EventDialogHeader from './event-dialog/EventDialogHeader';
@@ -34,6 +34,7 @@ const EditEventDialog: React.FC<EditEventDialogProps> = ({
   const [endTime, setEndTime] = useState('');
   const [category, setCategory] = useState<EventCategory>('work');
   const [isImportant, setIsImportant] = useState(false);
+  const [recurrence, setRecurrence] = useState('none');
 
   useEffect(() => {
     if (event) {
@@ -43,6 +44,7 @@ const EditEventDialog: React.FC<EditEventDialogProps> = ({
       setEndTime(event.endTime.toString());
       setCategory(event.category);
       setIsImportant(event.isImportant);
+      setRecurrence('none'); // Default recurrence
     } else {
       // Default values for new event
       setTitle('');
@@ -51,6 +53,7 @@ const EditEventDialog: React.FC<EditEventDialogProps> = ({
       setEndTime('');
       setCategory('work');
       setIsImportant(false);
+      setRecurrence('none');
     }
   }, [event]);
 
@@ -116,20 +119,10 @@ const EditEventDialog: React.FC<EditEventDialogProps> = ({
               categories={categories}
             />
 
-            <div className="space-y-2">
-              <Label htmlFor="recurrence">Recurrence</Label>
-              <Select defaultValue="none">
-                <SelectTrigger>
-                  <SelectValue placeholder="No recurrence" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">No Recurrence</SelectItem>
-                  <SelectItem value="daily">Daily</SelectItem>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <EventRecurrenceSelect
+              recurrence={recurrence}
+              onRecurrenceChange={setRecurrence}
+            />
           </div>
 
           <div className="flex items-center justify-between">
